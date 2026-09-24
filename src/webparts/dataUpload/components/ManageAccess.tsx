@@ -197,9 +197,7 @@ export default function ManageAccess(props: IDataUploadProps) {
     }
   };
 
-  const handleSave = async () => {
-    debugger;
-
+const handleSave = async () => {
   if (isSaving) return;
 
   if (!division || !fromDate || !uptoDate) {
@@ -218,40 +216,65 @@ export default function ManageAccess(props: IDataUploadProps) {
   }
 
   try {
-
     setIsSaving(true);
 
     console.log("Selected User/Group:", selectedUser);
 
-    let isGroup = false;
-    let groupUsers: any[] = [];
+    const selectedText = selectedUser.text?.trim();
+    const selectedKey = selectedUser.key?.trim();
 
-    // Check whether selected value is SharePoint Group
+    console.log("Selected Text:", selectedText);
+    console.log("Selected Key:", selectedKey);
+
+    // =========================================================
+    // STEP 1: Check whether selected item is a SharePoint Group
+    // =========================================================
+
+    let sharePointGroup: any = null;
+
     try {
+      if (selectedText) {
+        sharePointGroup = await sp.web.siteGroups
+          .getByName(selectedText)();
 
-      groupUsers = await sp.web.siteGroups
-        .getByName(selectedUser.text)
-        .users();
-
-      isGroup = true;
-
-    } catch (err) {
-
-      isGroup = false;
-
+        console.log("SharePoint Group Found:", sharePointGroup);
+      }
+    } catch (groupError) {
+      console.log(
+        "Selected item is not a SharePoint group:",
+        selectedText
+      );
     }
 
-    // ==========================
-    // GROUP SELECTED
-    // ==========================
-    if (isGroup) {
+    // =========================================================
+    // STEP 2: GROUP
+    // =========================================================
 
-      if (groupUsers.length === 0) {
-        alert("No users found in selected group");
+    if (sharePointGroup) {
+      console.log(
+        `Getting users from SharePoint group: ${sharePointGroup.Title}`
+      );
+
+      const groupUsers = await sp.web.siteGroups
+        .getById(sharePointGroup.Id)
+        .users();
+
+      console.log("Group Users:", groupUsers);
+
+      if (!groupUsers || groupUsers.length === 0) {
+        alert(
+          `No users found in '${sharePointGroup.Title}' group`
+        );
         return;
       }
 
+      // Add every member to AccrualSheetAccessList
       for (const user of groupUsers) {
+        if (!user.Id) {
+          continue;
+        }
+
+        console.log("Adding group member:", user);
 
         await sp.web.lists
           .getByTitle("AccrualSheetAccessList")
@@ -261,66 +284,75 @@ export default function ManageAccess(props: IDataUploadProps) {
             FromDate: fromDate,
             UptoDate: uptoDate,
             UsernameId: user.Id,
-            Status: "Active"
+            Status: "Active",
           });
-
       }
 
       alert(
-        `${groupUsers.length} users from '${selectedUser.text}' group added successfully`
+        `${groupUsers.length} users from '${sharePointGroup.Title}' group added successfully`
       );
-
     }
 
-    // ==========================
-    // USER SELECTED
-    // ==========================
-    else {
+    // =========================================================
+    // STEP 3: USER
+    // =========================================================
 
-      const ensuredUser = await sp.web.ensureUser(
-        selectedUser.loginName
-      );
+    else {
+      console.log("Processing individual user");
+
+      if (!selectedUser.loginName && !selectedKey) {
+        alert("Unable to determine selected user");
+        return;
+      }
+
+      const loginName =
+        selectedUser.loginName || selectedKey;
+
+      console.log("Ensuring user:", loginName);
+
+      const ensuredUser = await sp.web.ensureUser(loginName);
+
+      console.log("Ensured User:", ensuredUser);
 
       await sp.web.lists
         .getByTitle("AccrualSheetAccessList")
         .items.add({
-          Title: selectedUser.text,
+          Title: selectedText,
           Division: division,
           FromDate: fromDate,
           UptoDate: uptoDate,
           UsernameId: ensuredUser.Id,
-          Status: "Active"
+          Status: "Active",
         });
 
       alert("User access provided successfully");
-
     }
 
-    // Reset Form
+    // =========================================================
+    // STEP 4: RESET FORM
+    // =========================================================
+
     setFromDate("");
     setUptoDate("");
     setSelectedUser(null);
     setEmployeeName("");
 
-    setPickerKey(prev => prev + 1);
+    setPickerKey((prev) => prev + 1);
 
     await getAccessInfo();
 
   } catch (error) {
-
     console.error("Save Error:", error);
     alert("Error saving data");
-
   } finally {
-
     setIsSaving(false);
-
   }
-
 };
   const handleExit = () => {
     //window.location.href = `${window.location.origin}/sites/SonaFinance/SitePages/Accuralsheet.aspx`;
-     window.location.href = `https://sonacomstargroup.sharepoint.com/sites/RLY_Finance_UAT/SitePages/Accuralsheet.aspx`;
+          const webUrl = props.context.pageContext.web.absoluteUrl;
+
+    window.location.href = `${webUrl}/SitePages/Accuralsheet.aspx`;
   };
 
   // Save Button
@@ -356,7 +388,7 @@ export default function ManageAccess(props: IDataUploadProps) {
     void getAccessInfo();
   }, []);
 
-  
+
   return (
     <div>
       <div className="header">

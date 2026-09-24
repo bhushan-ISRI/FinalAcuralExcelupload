@@ -8,6 +8,7 @@ import "@pnp/sp/items";
 import { useState, useEffect } from "react";
 import Left from "../assets/LeftArrow.png";
 import Right from "../assets/RightArrow.png";
+import { IDataUploadProps } from "./IDataUploadProps";
 
 interface IData {
   FinancialYear: string;
@@ -17,7 +18,7 @@ interface IData {
   CreatedOn: string;
 }
 
-export default function PerformerClosureAccess() {
+export default function PerformerClosureAccess(props: IDataUploadProps) {
 
   const [division, setDivision] = React.useState("");
   const [fromDate, setFromDate] = React.useState("");
@@ -48,7 +49,8 @@ const [isSaving, setIsSaving] = React.useState(false);
   const handleExit = () => {
     //https://isriglobal.sharepoint.com/sites/SonaFinance/_layouts/workbench.aspx
   // window.location.href = `${window.location.origin}/sites/SonaFinance/SitePages/Accuralsheet.aspx`;
-    window.location.href = `https://sonacomstargroup.sharepoint.com/sites/RLY_Finance_UAT/SitePages/Accuralsheet.aspx`;
+        const webUrl = props.context.pageContext.web.absoluteUrl;
+    window.location.href = `${webUrl}/SitePages/Accuralsheet.aspx`;
   };
   // ✅ Fetch data
   const getHistoryData = async () => {

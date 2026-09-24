@@ -12,6 +12,7 @@ import "@pnp/sp/items";
 
 import Left from "../assets/LeftArrow.png";
 import Right from "../assets/RightArrow.png";
+import { IDataUploadProps } from "./IDataUploadProps";
 
 interface IData {
   Id: number;
@@ -28,7 +29,7 @@ interface IData {
   Remarks: string;
 }
 
-export default function freezeddashboard() {
+export default function freezeddashboard(props: IDataUploadProps) {
   const [isPerformer, setIsPerformer] = React.useState(false);
   const [file, setFile] = React.useState<File | null>(null);
   const [data, setData] = React.useState<IData[]>([]);
@@ -108,7 +109,9 @@ export default function freezeddashboard() {
   const handleExit = () => {
     //https://isriglobal.sharepoint.com/sites/SonaFinance/SitePages/Accuralsheet.aspx
     //window.location.href = `${window.location.origin}/sites/SonaFinance/SitePages/Accuralsheet.aspx`;
-   window.location.href = `https://sonacomstargroup.sharepoint.com/sites/RLY_Finance_UAT/SitePages/Accuralsheet.aspx`;
+          const webUrl = props.context.pageContext.web.absoluteUrl;
+
+   window.location.href = `${webUrl}/SitePages/Accuralsheet.aspx`;
   
   };
 

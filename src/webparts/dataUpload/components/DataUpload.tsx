@@ -186,19 +186,19 @@ export default function AccrualSheet(props: IDataUploadProps) {
   return <UploadAccrual {...props} />;
 }
   if (page === "report") {
-    return <AccuralReport />;
+    return <AccuralReport {...props}/>;
   }
 
   if (page === "Freezedreport") {
-    return <FreezedDashboard />;
+    return <FreezedDashboard  {...props}/>;
   }
  
   if (page === "report1") {
-    return <AdjustmentReport />;
+    return <AdjustmentReport  {...props}/>;
   }
  
   if (page === "Clouser") {
-    return <PerformerCloserAccess />;
+    return <PerformerCloserAccess {...props}/>;
   }
  
   return (

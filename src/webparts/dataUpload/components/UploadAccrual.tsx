@@ -657,7 +657,9 @@ export default function UploadAccrual(props: IDataUploadProps) {
     }
   };
   const handleExit = () => {
-    window.location.href = `https://sonacomstargroup.sharepoint.com/sites/RLY_Finance_UAT/SitePages/Accuralsheet.aspx`;
+          const webUrl = props.context.pageContext.web.absoluteUrl;
+
+    window.location.href = `${webUrl}/SitePages/Accuralsheet.aspx`;
   };
   const exitPage1 = async () => {
     window.location.href = `${window.location.origin}/sites/SonaFinance/SitePages/Accuralsheet.aspx`;

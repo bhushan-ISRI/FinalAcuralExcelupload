@@ -16,6 +16,7 @@ import Right from "../assets/RightArrow.png";
 import "@pnp/sp/webs";
 import "@pnp/sp/lists";
 import "@pnp/sp/items";
+import { IDataUploadProps } from "./IDataUploadProps";
 
 interface IData {
   Id: number;
@@ -37,7 +38,7 @@ interface IData {
 const toUtcMidnight = (dateStr: string): Date =>
   new Date(`${dateStr}T00:00:00.000Z`);
 
-export default function AdjustmentReport() {
+export default function AdjustmentReport(props: IDataUploadProps) {
   const [isPerformer, setIsPerformer] = React.useState(false);
   const [file, setFile] = React.useState<File | null>(null);
   const [data, setData] = React.useState<IData[]>([]);
@@ -61,7 +62,9 @@ export default function AdjustmentReport() {
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
 
   const handleExit = () => {
-    window.location.href = `https://sonacomstargroup.sharepoint.com/sites/RLY_Finance_UAT/SitePages/Accuralsheet.aspx`;
+          const webUrl = props.context.pageContext.web.absoluteUrl;
+
+    window.location.href = `${webUrl}/SitePages/Accuralsheet.aspx`;
   };
 
   const searchData = async () => {
@@ -567,8 +570,27 @@ export default function AdjustmentReport() {
           .items.getById(item.Id)
           .update({
             Status: "Freez",
+            MailSent:"No"
           });
       }
+
+    // const flowResponse = await fetch("YOUR_FLOW_URL", {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify({
+    //     action: "FreezeAccrual",
+    //     recordCount: pendingItems.length,
+    //   }),
+    // });
+
+    // if (!flowResponse.ok) {
+    //   throw new Error(
+    //     `Power Automate failed: ${flowResponse.status}`
+    //   );
+    // }
+
 
       alert("Records freeze successfully ✅");
 
