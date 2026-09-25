@@ -46,7 +46,7 @@ export default function AccuralReport(props: IDataUploadProps) {
   const [filteredData, setFilteredData] = useState<any[]>([]);
 
   // Pagination
-  const itemsPerPage = 10;
+  const itemsPerPage = 50;
   const [currentPage, setCurrentPage] = useState(1);
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
@@ -321,8 +321,8 @@ export default function AccuralReport(props: IDataUploadProps) {
                 >
                   <tr>
                     <th className="px-4 py-2">UserName</th>
-                    <th className="px-4 py-2">Employee Cost Center</th>
-                    <th className="px-4 py-2">Employee Cost Center Name</th>
+                    <th className="px-4 py-2">Cost Center</th>
+                    <th className="px-4 py-2">Cost Center Name</th>
                     <th className="px-4 py-2">Vendor Name</th>
                     <th className="px-4 py-2">Vendor Code</th>
                     <th className="px-4 py-2">PO Number</th>

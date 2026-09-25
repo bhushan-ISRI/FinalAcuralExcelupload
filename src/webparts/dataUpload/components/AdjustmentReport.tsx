@@ -56,7 +56,7 @@ export default function AdjustmentReport(props: IDataUploadProps) {
 
   const [filteredData, setFilteredData] = useState<any[]>([]);
 
-  const itemsPerPage = 10;
+  const itemsPerPage = 50;
   const [currentPage, setCurrentPage] = useState(1);
   const totalPages = Math.ceil(data.length / itemsPerPage);
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
@@ -885,8 +885,8 @@ export default function AdjustmentReport(props: IDataUploadProps) {
                     </th>
                     <th className="px-4 py-2">Created Date</th>
                     <th className="px-4 py-2">UserName</th>
-                    <th className="px-4 py-2">Employee Cost Center</th>
-                    <th className="px-4 py-2">Employee Cost Center Name</th>
+                    <th className="px-4 py-2">Cost Center</th>
+                    <th className="px-4 py-2">Cost Center Name</th>
                     <th className="px-4 py-2">Vendor Name</th>
                     <th className="px-4 py-2">Vendor Code</th>
                     <th className="px-4 py-2">PO Number</th>

@@ -46,7 +46,7 @@ export default function ManageAccess(props: IDataUploadProps) {
   const [filteredData, setFilteredData] = useState<any[]>([]);
 
   // Pagination
-  const itemsPerPage = 5;
+  const itemsPerPage = 50;
   const [currentPage, setCurrentPage] = useState(1);
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 

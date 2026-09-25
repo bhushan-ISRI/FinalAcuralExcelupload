@@ -102,8 +102,8 @@ export default function UploadAccrual(props: IDataUploadProps) {
 
   const requiredColumns = [
     "UserName ",
-    "Employee Cost Center ",
-    "Employee Cost Center Name ",
+    "Cost Center ",
+    "Cost Center Name ",
     "Vendor Name",
     "Vendor Code ",
     "PO Number",
@@ -528,9 +528,9 @@ export default function UploadAccrual(props: IDataUploadProps) {
         validRows.push({
           Title: username,
           Username: username,
-          EmployeeCostCenter: String(row["Employee Cost Center "] || ""),
+          EmployeeCostCenter: String(row["Cost Center "] || ""),
           EmployeeCostCenterName: String(
-            row["Employee Cost Center Name "] || "",
+            row["Cost Center Name "] || "",
           ),
           VendorName: String(row["Vendor Name"] || ""),
           VendorCode: String(row["Vendor Code "] || ""),
@@ -996,8 +996,8 @@ export default function UploadAccrual(props: IDataUploadProps) {
                   />
                 </th>
                 <th>User</th>
-                <th>Employee Cost Center</th>
-                <th>Employee Cost Center Name</th>
+                <th>Cost Center</th>
+                <th>Cost Center Name</th>
                 <th>Vendor</th>
                 <th>PO</th>
                 <th>Amount</th>
@@ -1053,11 +1053,11 @@ export default function UploadAccrual(props: IDataUploadProps) {
             <thead>
               <tr>
                 <th>User</th>
-                <th>Employee Cost Center</th>
-                <th>Employee Cost Center Name</th>
+                <th>Cost Center</th>
+                <th>Cost Center Name</th>
                 <th>Vendor</th>
                 <th>PO Number</th>
-                <th>Amount</th>
+                <th style={{width:"150px"}} >Amount</th>
                 <th>Month</th>
                 <th>Status</th>
               </tr>
